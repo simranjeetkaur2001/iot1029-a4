@@ -1,0 +1,77 @@
+.global _start
+
+// Defining constants for grades 
+.equ gradea, 90
+.equ gradeb, 75
+.equ gradec, 50
+
+_start:
+    MOV R5, #78            // The assignment grade (you can change this value)
+
+    // Load the addresses of grade constants into registers
+    LDR R6, =grade A
+    LDR R7, =grade B
+    LDR R8, =grade C
+
+    CMP R5, #grade A        // Compare R5 with grade A
+    BGE prnta               // Branch to prnta if R5 >= grade A
+
+    CMP R5, #gradeb         // Compare R5 with grade B
+    BGE prntb               // Branch to prntb if R5 >= grade B
+
+    CMP R5, #gradec         // Compare R5 with grade C
+    BGE prntc               // Branch to prntc if R5 >= grade C
+
+    // If the grade is less than gradec, print grade F
+    B prntf
+
+prnta:
+    // Print "Congratulations! You got an A."
+    LDR R1, =amessage_a
+    LDR R2, =amessage_a_len
+    B print_message
+
+prntb:
+    // Print "Good job! You got a B."
+    LDR R1, =amessage_b
+    LDR R2, =amessage_b_len
+    B print_message
+
+prntc:
+    // Print "Not bad, you got a C."
+    LDR R1, =amessage_c
+    LDR R2, =amessage_c_len
+    B print_message
+
+prntf:
+    // Print "Sorry, you got an F."
+    LDR R1, =amessage_f
+    LDR R2, =amessage_f_len
+    B print_message
+
+print_message:
+    // Syscall code for write
+    MOV R7, #4
+    SWI 0
+
+    // Exit the program
+    MOV R7, #1
+    SWI 0
+
+.data
+amessage_a:
+    .asciz "Congratulations! You got an A.\n"
+amessage_a_len = . - amessage_a
+
+amessage_b:
+    .asciz "Good job! You got a B.\n"
+amessage_b_len = . - amessage_b
+
+amessage_c:
+    .asciz "Not bad, you got a C.\n"
+amessage_c_len = . - amessage_c
+
+amessage_f:
+    .asciz "Sorry, you got an F.\n"
+amessage_f_len = . - amessage_f
+ 
